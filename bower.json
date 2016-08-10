@@ -1,0 +1,21 @@
+{
+  "name": "calc",
+  "description": "",
+  "main": "index.js",
+  "authors": [
+    "mao <green.turban@gmail.com>"
+  ],
+  "license": "ISC",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap-sass": "^3.3.7"
+  }
+}
