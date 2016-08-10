@@ -67,17 +67,13 @@ function server(done) {
 }
 
 export function watch() {
-    gulp.watch(paths.scripts.src, scripts);
-    gulp.watch(paths.styles.src, styles);
-    gulp.watch(paths.src, gulp.series(html, browser.reload));
+    gulp.watch(paths.scripts.src, scripts).on('change', gulp.series(scripts, browser.reload));
+    gulp.watch(paths.styles.src, styles).on('change', gulp.series(styles, browser.reload));
+    gulp.watch(paths.src).on('change', gulp.series(html, browser.reload));
 }
 
 const build = gulp.series(clean, gulp.parallel(styles, scripts, html), server, watch);
 export { build };
-
-const build_debug = gulp.parallel(styles, scripts);
-export { build_debug };
-
 
 /*
  * Export a default task
