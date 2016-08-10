@@ -1,8 +1,20 @@
 @import 'bootstrap';
 
-$amColor: rgb(20,140,84);
+$amColor: hsl(119, 38%, 31%);
 
 .mao {
   color: $amColor;
+  font-weight: bold;
 }
 
+.todo {
+  font-family: "Consolas";
+  font-size: 36pt;
+}
+
+.col-md-4 {
+  background-color: #0f7595;
+  footer {
+    background-color: rosybrown;
+  }
+}
