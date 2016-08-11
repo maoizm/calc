@@ -1,8 +1,29 @@
+$font-family-sans-serif:  Consolas, "Trebuchet MS", "Helvetica Neue", Helvetica, Arial, sans-serif;
+$font-family-serif:       Georgia, "Times New Roman", Times, serif;
+
 @import 'bootstrap';
 
-$amColor: rgb(20,140,84);
+/* custom settings that deviate from Bootstrap's default values 
+$font-family-sans-serif:  Consolas, "Trebuchet MS", "Helvetica Neue", Helvetica, Arial, sans-serif;
+$font-family-serif:       Georgia, "Times New Roman", Times, serif; 
+*/
+
+$amColor: hsl(119, 38%, 31%);
 
 .mao {
   color: $amColor;
+  font-weight: bold;
 }
 
+.todo {
+  font-family: "Consolas";
+  font-size: 36pt;
+}
+
+.col-md-4 {
+  background-color: #0f7595;
+  footer {
+font-family: $font-family-sans-serif;
+    background-color: rosybrown;
+  }
+}

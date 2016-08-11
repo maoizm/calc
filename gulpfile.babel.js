@@ -19,6 +19,7 @@ const paths = {
         main: 'src/assets/scss/app.scss',
         includePaths: ['bower_components/bootstrap-sass/assets/stylesheets'],
         src:  'src/assets/scss/**/*.scss',
+        fonts:'src/assets/fonts/**/*',
         dest: 'dist/assets/css/'
     },
     scripts: {
