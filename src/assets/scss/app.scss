@@ -1,11 +1,12 @@
-$font-family-sans-serif:  Consolas, "Trebuchet MS", "Helvetica Neue", Helvetica, Arial, sans-serif;
-$font-family-serif:       Georgia, "Times New Roman", Times, serif;
-
 @import 'bootstrap';
+@import 'custom-variables';
+@import 'custom-other';
+//@import 'bootstrap/utilities';
 
-/* custom settings that deviate from Bootstrap's default values 
-$font-family-sans-serif:  Consolas, "Trebuchet MS", "Helvetica Neue", Helvetica, Arial, sans-serif;
-$font-family-serif:       Georgia, "Times New Roman", Times, serif; 
+/*
+
+mao: my own semantic classes
+
 */
 
 $amColor: hsl(119, 38%, 31%);

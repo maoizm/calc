@@ -39,5 +39,3 @@ dist/
 bower_components/
 .idea/*.iml
 .idea/workspace.xml
-.idea/jsLibraryMappings.xml
-.idea/libraries/

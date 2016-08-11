@@ -19,8 +19,9 @@ const paths = {
         main: 'src/assets/scss/app.scss',
         includePaths: ['bower_components/bootstrap-sass/assets/stylesheets'],
         src:  'src/assets/scss/**/*.scss',
-        fonts:'src/assets/fonts/**/*',
-        dest: 'dist/assets/css/'
+        dest: 'dist/assets/css/',
+        fonts_src: 'src/assets/fonts/**/*',
+        fonts_dest:'dist/assets/fonts/'
     },
     scripts: {
         src:  'src/assets/js/**/*.js',
@@ -41,6 +42,11 @@ export function styles() {
         }))
         //.pipe(cleanCSS({keepSpecialComments: 0}))
         .pipe(gulp.dest(paths.styles.dest));
+}
+
+export function fonts() {
+    return gulp.src(paths.styles.fonts_src)
+        .pipe(gulp.dest(paths.styles.fonts_dest));
 }
 
 export function scripts() {
@@ -73,7 +79,7 @@ export function watch() {
     gulp.watch(paths.src).on('change', gulp.series(html, browser.reload));
 }
 
-const build = gulp.series(clean, gulp.parallel(styles, scripts, html), server, watch);
+const build = gulp.series(clean, gulp.parallel(fonts, styles, scripts, html), server, watch);
 export { build };
 
 /*
