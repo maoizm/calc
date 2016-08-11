@@ -4,7 +4,9 @@ mao: custom settings that deviate from Bootstrap's default values
 
 */
 
+$mao_test:  green;
 $font-family-sans-serif:  Consolas, "Trebuchet MS", "Helvetica Neue", Helvetica, Arial, sans-serif;
 $font-family-serif:       Georgia, "Times New Roman", Times, serif;
+$font-family-base:        $font-family-sans-serif;
 
 .maomao { display: block; }

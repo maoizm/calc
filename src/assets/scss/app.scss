@@ -24,7 +24,12 @@ $amColor: hsl(119, 38%, 31%);
 .col-md-4 {
   background-color: #0f7595;
   footer {
-font-family: $font-family-sans-serif;
+    font-family: $font-family-sans-serif;
+    color:  $mao_test;
     background-color: rosybrown;
   }
+
+.mao_test {
+  color: $mao_test;
+}
 }

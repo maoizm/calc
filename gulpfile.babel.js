@@ -20,7 +20,7 @@ const paths = {
         includePaths: ['bower_components/bootstrap-sass/assets/stylesheets'],
         src:  'src/assets/scss/**/*.scss',
         dest: 'dist/assets/css/',
-        fonts_src: 'src/assets/fonts/**/*',
+        fonts_src: 'bower_components/bootstrap-sass/assets/fonts/**/*',
         fonts_dest:'dist/assets/fonts/'
     },
     scripts: {
@@ -74,9 +74,10 @@ function server(done) {
 }
 
 export function watch() {
-    gulp.watch(paths.scripts.src, scripts).on('change', gulp.series(scripts, browser.reload));
-    gulp.watch(paths.styles.src, styles).on('change', gulp.series(styles, browser.reload));
-    gulp.watch(paths.src).on('change', gulp.series(html, browser.reload));
+  gulp.watch(paths.scripts.src, scripts).on('change', gulp.series(scripts, browser.reload));
+  gulp.watch(paths.styles.main, styles).on('change', gulp.series(styles, browser.reload));
+  gulp.watch(paths.styles.src, styles).on('change', gulp.series(styles, browser.reload));
+  gulp.watch(paths.src).on('change', gulp.series(html, browser.reload));
 }
 
 const build = gulp.series(clean, gulp.parallel(fonts, styles, scripts, html), server, watch);
