@@ -3,29 +3,33 @@
  */
 
 import gulp from 'gulp';
-import babel from 'gulp-babel';
-import sass from 'gulp-sass';
-import uglify from 'gulp-uglify';
-import concat from 'gulp-concat';
-import cleanCSS from 'gulp-clean-css';
+import plugins from 'gulp-load-plugins';
+// import babel from 'gulp-babel';
+// import sass from 'gulp-sass';
+// import uglify from 'gulp-uglify';
+// import concat from 'gulp-concat';
+// import cleanCSS from 'gulp-clean-css';
 import mainBowerFiles from 'main-bower-files';
 import browser  from 'browser-sync';
 import rimraf from 'rimraf';
 
+const $ = plugins();   // loading all gulp plugins
+
 const paths = {
-    src:      'src/**/*.html',
-    dest:     'dist/',
+    src:              'src/**/*.html',
+    dest:             'dist/',
+    dest_assets:      'dist/assets/',
     styles: {
-        main: 'src/assets/scss/app.scss',
-        includePaths: ['bower_components/bootstrap-sass/assets/stylesheets'],
-        src:  'src/assets/scss/**/*.scss',
-        dest: 'dist/assets/css/',
-        fonts_src: 'bower_components/bootstrap-sass/assets/fonts/**/*',
-        fonts_dest:'dist/assets/fonts/'
+        main:         'src/assets/scss/app.scss',
+        includePaths:['bower_components/bootstrap-sass/assets/stylesheets'],
+        src:          'src/assets/scss/**/*.scss',
+        dest:         'dist/assets/css/',
+        fonts_src:    'bower_components/bootstrap-sass/assets/fonts/**/*',
+        fonts_dest:   'dist/assets/fonts/'
     },
     scripts: {
-        src:  'src/assets/js/**/*.js',
-        dest: 'dist/assets/js/'
+        src:          'src/assets/js/**/*.js',
+        dest:         'dist/assets/js/'
     }
 };
 
@@ -33,18 +37,23 @@ function clean(done) {
     rimraf(paths.dest, done);
 }
 
+function prepareBowerFiles() {
+  return gulp.src(mainBowerFiles())
+      .pipe(gulp.dest(paths.dest_assets));
+}
+
 export function styles() {
     var files=mainBowerFiles(/.*\.scss/);
     files.push(paths.styles.src);
     return gulp.src(paths.styles.main)
-        .pipe(sass({
+        .pipe($.sass({
             includePaths: paths.styles.includePaths
         }))
         //.pipe(cleanCSS({keepSpecialComments: 0}))
         .pipe(gulp.dest(paths.styles.dest));
 }
 
-function fonts() {
+export function fonts() {
     return gulp.src(paths.styles.fonts_src)
         .pipe(gulp.dest(paths.styles.fonts_dest));
 }
@@ -53,18 +62,18 @@ export function scripts() {
     var files=mainBowerFiles(/.*\.js/);
     files.push(paths.scripts.src);
     return gulp.src(files, { sourcemaps: true })
-        .pipe(uglify())
-        .pipe(concat('main.min.js'))
+        .pipe($.uglify())
+        .pipe($.concat('main.min.js'))
         .pipe(gulp.dest(paths.scripts.dest));
 }
 
-function html(){
+export function html(){
     return gulp.src(paths.src)
         .pipe(gulp.dest(paths.dest));
 }
 
 // Start a server with LiveReload to preview the site in
-function server(done) {
+export function server(done) {
     browser.init({
         server: {
             baseDir: 'dist'
@@ -86,4 +95,6 @@ export { build };
 /*
  * Export a default task
  */
-export default build;
+// export default build;
+const build_bower = gulp.series(prepareBowerFiles);
+export default build_bower;

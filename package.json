@@ -7,22 +7,26 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "gulp": "gulp"
   },
-  "author": "",
+  "author": "mao",
   "license": "ISC",
   "devDependencies": {
     "babel-preset-es2015": "^6.13.2",
     "babel-register": "^6.11.6",
+    "bower": "^1.7.9",
     "browser-sync": "^2.14.0",
     "gulp": "git+https://github.com/gulpjs/gulp.git#4.0",
     "gulp-babel": "^6.1.2",
     "gulp-clean-css": "^2.0.12",
     "gulp-concat": "^2.6.0",
+    "gulp-load-plugins": "^1.2.4",
     "gulp-sass": "^2.3.2",
     "gulp-uglify": "^2.0.0",
     "main-bower-files": "^2.13.1",
     "rimraf": "^2.5.4"
   },
   "babel": {
-    "presets": [ "es2015" ]
+    "presets": [
+      "es2015"
+    ]
   }
 }
