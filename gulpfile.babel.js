@@ -44,7 +44,7 @@ export function styles() {
         .pipe(gulp.dest(paths.styles.dest));
 }
 
-export function fonts() {
+function fonts() {
     return gulp.src(paths.styles.fonts_src)
         .pipe(gulp.dest(paths.styles.fonts_dest));
 }

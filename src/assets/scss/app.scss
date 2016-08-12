@@ -1,6 +1,6 @@
-@import 'bootstrap';
 @import 'custom-variables';
 @import 'custom-other';
+@import 'bootstrap';
 //@import 'bootstrap/utilities';
 
 /*
@@ -28,8 +28,8 @@ $amColor: hsl(119, 38%, 31%);
     color:  $mao_test;
     background-color: rosybrown;
   }
+}
 
 .mao_test {
   color: $mao_test;
-}
 }
