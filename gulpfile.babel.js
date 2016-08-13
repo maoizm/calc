@@ -41,9 +41,17 @@ const paths = {
   }
 };
 
+export function debug_styles() {
+  return gulp.src(mainBowerFiles())
+    .pipe($.filter(['**/*.scss']))
+    .pipe($.debug({title: 'unicorn:'}))
+    .pipe(gulp.dest(paths.dest));
+}
+
 function clean(done) {
   rimraf(paths.dest, done);
 }
+/*
 
 function prepareBowerFiles() {
   return gulp.src(mainBowerFiles())
@@ -79,8 +87,10 @@ export function html(){
     return gulp.src(paths.src)
         .pipe(gulp.dest(paths.dest));
 }
+*/
 
 // Start a server with LiveReload to preview the site in
+/*
 export function server(done) {
     browser.init({
         server: {
@@ -99,6 +109,7 @@ export function watch() {
 
 const build = gulp.series(clean, gulp.parallel(fonts, styles, scripts, html), server, watch);
 export {build};
+*/
 
 /*
  *   Export a default task
@@ -106,5 +117,8 @@ export {build};
 
 
 // export default build;
-const build_bower = gulp.series(prepareBowerFiles);
-export default build_bower;
+// const build_bower = gulp.series(prepareBowerFiles);
+//export default build_bower;
+
+const gulp_debug = gulp.series(clean, debug_styles);
+export default gulp_debug;
