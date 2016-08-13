@@ -2,96 +2,117 @@
  * Created by mao on 10.08.2016.
  */
 
+// Gulp and autoloaded plugins
 import gulp from 'gulp';
 import plugins from 'gulp-load-plugins';
-import babel from 'gulp-babel';
-import sass from 'gulp-sass';
-import uglify from 'gulp-uglify';
-import concat from 'gulp-concat';
-import cleanCSS from 'gulp-clean-css';
 
-// other tools
-
-import mainBowerFiles from 'main-bower-files';
+// Other build tools
 import browser  from 'browser-sync';
 import rimraf from 'rimraf';
 
-const $ = plugins();   // loading all gulp plugins
+const $ = plugins({
+  rename: {
+    'gulp-clean-css': 'cleanCSS'
+  }
+});
+
+/*  production folder structure
+
+    dist/
+      assets/
+        css/      (flat)
+        fonts/
+        images/
+        js/       (flat)
+      app/
+        .../
+      app.(php|html)
+*/
+
+const bower = {
+  rootDir: "./bower_components"
+};
+
+const config = {
+  srcDir: 'src',
+  destDir: 'dist',
+  bowerRootDir: "./bower_components"
+}
 
 const paths = {
-  src: 'src/**/*.html',
-  dest: 'dist/',
+  src: config.srcDir + '/**/*.html',
+  dest: config.destDir,
   styles: {
-    src: {
-      main: 'src/assets/scss/app.scss',
-      bootstrap: 'bower_components/bootstrap-sass/assets/stylesheets'
-    },
-    dest: 'dist/assets/css/'
+    src: [
+      config.srcDir + '/assets/scss/app.scss'
+    ],
+    include: [
+      config.bowerRootDir + '/bootstrap-sass/assets/stylesheets'
+    ],
+    dest: config.destDir + '/assets/css/',
+    concatName: 'app.min.css'
   },
   fonts: {
-    src: 'bower_components/bootstrap-sass/assets/fonts/**/*',
-    dest: 'dist/assets/fonts/'
+    src: [
+      config.srcDir + '/assets/fonts/**/*',
+      config.bowerRootDir + '/bootstrap-sass/assets/fonts/**/*'
+    ],
+    dest: config.destDir + '/assets/fonts/'
   },
   scripts: {
-    src: {
-      main: 'src/assets/js/**/*.js',
-      bootstrap: 'bower_components/bootstrap-sass/assets/javascrtips/bootstrap.js'
-    },
-    dest: 'dist/assets/js/'
+    src: [
+      config.srcDir + '/assets/js/**/*.js'
+    ],
+    lib: [
+      config.bowerRootDir + '/bootstrap-sass/assets/javascripts/bootstrap.*js'
+    ],
+    dest: config.destDir + '/assets/js/'
   }
 };
 
-export function debug_styles() {
-  return gulp.src(mainBowerFiles())
-    .pipe($.filter(['**/*.scss']))
-    .pipe($.debug({title: 'unicorn:'}))
+
+function sass() {
+  //console.log(paths.styles.include);
+  return gulp.src(paths.styles.src)
+      .pipe($.sass({
+            includePaths: paths.styles.include
+          })
+          .on('error', $.sass.logError))
+      .pipe($.concat(paths.styles.concatName))
+      .pipe($.cleanCSS({
+            keepSpecialComments: false //, keepBreaks: true
+          }))
+      .pipe(gulp.dest(paths.styles.dest));
+}
+
+function fonts() {
+  return gulp.src(paths.fonts.src)
+      .pipe(gulp.dest(paths.fonts.dest));
+}
+
+function html() {
+  return gulp.src(paths.src)
     .pipe(gulp.dest(paths.dest));
 }
 
-function clean(done) {
+const styles_html = gulp.series(clean, gulp.parallel(sass, fonts, html));
+
+export function clean(done) {
   rimraf(paths.dest, done);
 }
-/*
 
-function prepareBowerFiles() {
-  return gulp.src(mainBowerFiles())
-      .pipe(gulp.dest(paths.dest_assets));
-}
-
-export function styles() {
-    var files=mainBowerFiles(/.*\.scss/);
-    files.push(paths.styles.src);
-    return gulp.src(paths.styles.main)
-        .pipe($.sass({
-            includePaths: paths.styles.includePaths
-        }))
-        //.pipe(cleanCSS({keepSpecialComments: 0}))
-        .pipe(gulp.dest(paths.styles.dest));
-}
-
-export function fonts() {
-    return gulp.src(paths.styles.fonts_src)
-        .pipe(gulp.dest(paths.styles.fonts_dest));
-}
-
-export function scripts() {
-    var files=mainBowerFiles(/.*\.js/);
-    files.push(paths.scripts.src);
-    return gulp.src(files, { sourcemaps: true })
+function scripts() {
+    return gulp.src([].concat(paths.scripts.src, paths.scripts.lib), { sourcemaps: true })
         .pipe($.uglify())
         .pipe($.concat('main.min.js'))
         .pipe(gulp.dest(paths.scripts.dest));
 }
 
-export function html(){
-    return gulp.src(paths.src)
-        .pipe(gulp.dest(paths.dest));
-}
-*/
+const styles_html_scripts = gulp.series(clean, gulp.parallel(sass, fonts, html, scripts));
 
 // Start a server with LiveReload to preview the site in
-/*
-export function server(done) {
+
+function server(done) {
     browser.init({
         server: {
             baseDir: 'dist'
@@ -100,25 +121,18 @@ export function server(done) {
     done();
 }
 
-export function watch() {
+function watch() {
   gulp.watch(paths.scripts.src, scripts).on('change', gulp.series(scripts, browser.reload));
-  gulp.watch(paths.styles.main, styles).on('change', gulp.series(styles, browser.reload));
-  gulp.watch(paths.styles.src, styles).on('change', gulp.series(styles, browser.reload));
+  gulp.watch(paths.styles.src, sass).on('change', gulp.series(sass, browser.reload));
   gulp.watch(paths.src).on('change', gulp.series(html, browser.reload));
 }
 
-const build = gulp.series(clean, gulp.parallel(fonts, styles, scripts, html), server, watch);
+const build = gulp.series(clean, gulp.parallel(fonts, sass, scripts, html), server, watch);
 export {build};
-*/
 
 /*
  *   Export a default task
  */
 
-
-// export default build;
-// const build_bower = gulp.series(prepareBowerFiles);
-//export default build_bower;
-
-const gulp_debug = gulp.series(clean, debug_styles);
-export default gulp_debug;
+// export default styles_html_scripts;
+export default build;
