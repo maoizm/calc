@@ -29,10 +29,6 @@ const $ = plugins({
       app.(php|html)
 */
 
-const bower = {
-  rootDir: "./bower_components"
-};
-
 const config = {
   srcDir: 'src',
   destDir: 'dist',
@@ -92,7 +88,7 @@ function fonts() {
 
 function html() {
   return gulp.src(paths.src)
-    .pipe(gulp.dest(paths.dest));
+      .pipe(gulp.dest(paths.dest));
 }
 
 const styles_html = gulp.series(clean, gulp.parallel(sass, fonts, html));
@@ -102,10 +98,10 @@ export function clean(done) {
 }
 
 function scripts() {
-    return gulp.src([].concat(paths.scripts.src, paths.scripts.lib), { sourcemaps: true })
-        .pipe($.uglify())
-        .pipe($.concat('main.min.js'))
-        .pipe(gulp.dest(paths.scripts.dest));
+  return gulp.src([].concat(paths.scripts.src, paths.scripts.lib), { sourcemaps: true })
+      .pipe($.uglify())
+      .pipe($.concat('main.min.js'))
+      .pipe(gulp.dest(paths.scripts.dest));
 }
 
 const styles_html_scripts = gulp.series(clean, gulp.parallel(sass, fonts, html, scripts));
@@ -113,18 +109,26 @@ const styles_html_scripts = gulp.series(clean, gulp.parallel(sass, fonts, html, 
 // Start a server with LiveReload to preview the site in
 
 function server(done) {
-    browser.init({
-        server: {
-            baseDir: 'dist'
-        }
-    });
-    done();
+  browser.init({
+      server: {
+        baseDir: 'dist'
+      }
+  });
+  done();
 }
 
 function watch() {
   gulp.watch(paths.scripts.src, scripts).on('change', gulp.series(scripts, browser.reload));
   gulp.watch(paths.styles.src, sass).on('change', gulp.series(sass, browser.reload));
   gulp.watch(paths.src).on('change', gulp.series(html, browser.reload));
+}
+
+export function bump(aType = 'patch') {
+  return gulp.src('./package.json')
+      .pipe($.bump({
+          type: aType
+        }))
+      .pipe(gulp.dest('./'));
 }
 
 const build = gulp.series(clean, gulp.parallel(fonts, sass, scripts, html), server, watch);
