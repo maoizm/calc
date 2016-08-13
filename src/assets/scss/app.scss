@@ -9,9 +9,11 @@ mao: my own semantic classes
 
 */
 
+$mao_test: darken(green, 20%);
 $amColor: hsl(119, 38%, 31%);
 
 .mao {
+  background-color: hsl(119, 38%, 90%);
   color: $amColor;
   font-weight: bold;
 }
@@ -22,7 +24,6 @@ $amColor: hsl(119, 38%, 31%);
 }
 
 .col-md-4 {
-  background-color: #0f7595;
   footer {
     font-family: $font-family-sans-serif;
     color:  $mao_test;

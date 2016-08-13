@@ -4,11 +4,14 @@
 
 import gulp from 'gulp';
 import plugins from 'gulp-load-plugins';
-// import babel from 'gulp-babel';
-// import sass from 'gulp-sass';
-// import uglify from 'gulp-uglify';
-// import concat from 'gulp-concat';
-// import cleanCSS from 'gulp-clean-css';
+import babel from 'gulp-babel';
+import sass from 'gulp-sass';
+import uglify from 'gulp-uglify';
+import concat from 'gulp-concat';
+import cleanCSS from 'gulp-clean-css';
+
+// other tools
+
 import mainBowerFiles from 'main-bower-files';
 import browser  from 'browser-sync';
 import rimraf from 'rimraf';
@@ -16,25 +19,30 @@ import rimraf from 'rimraf';
 const $ = plugins();   // loading all gulp plugins
 
 const paths = {
-    src:              'src/**/*.html',
-    dest:             'dist/',
-    dest_assets:      'dist/assets/',
-    styles: {
-        main:         'src/assets/scss/app.scss',
-        includePaths:['bower_components/bootstrap-sass/assets/stylesheets'],
-        src:          'src/assets/scss/**/*.scss',
-        dest:         'dist/assets/css/',
-        fonts_src:    'bower_components/bootstrap-sass/assets/fonts/**/*',
-        fonts_dest:   'dist/assets/fonts/'
+  src: 'src/**/*.html',
+  dest: 'dist/',
+  styles: {
+    src: {
+      main: 'src/assets/scss/app.scss',
+      bootstrap: 'bower_components/bootstrap-sass/assets/stylesheets'
     },
-    scripts: {
-        src:          'src/assets/js/**/*.js',
-        dest:         'dist/assets/js/'
-    }
+    dest: 'dist/assets/css/'
+  },
+  fonts: {
+    src: 'bower_components/bootstrap-sass/assets/fonts/**/*',
+    dest: 'dist/assets/fonts/'
+  },
+  scripts: {
+    src: {
+      main: 'src/assets/js/**/*.js',
+      bootstrap: 'bower_components/bootstrap-sass/assets/javascrtips/bootstrap.js'
+    },
+    dest: 'dist/assets/js/'
+  }
 };
 
 function clean(done) {
-    rimraf(paths.dest, done);
+  rimraf(paths.dest, done);
 }
 
 function prepareBowerFiles() {
@@ -90,11 +98,13 @@ export function watch() {
 }
 
 const build = gulp.series(clean, gulp.parallel(fonts, styles, scripts, html), server, watch);
-export { build };
+export {build};
 
 /*
- * Export a default task
+ *   Export a default task
  */
+
+
 // export default build;
 const build_bower = gulp.series(prepareBowerFiles);
 export default build_bower;
