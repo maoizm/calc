@@ -9,7 +9,7 @@ mao: my own semantic classes
 
 */
 
-$mao_test: darken(green, 20%);
+$mainColor: darken(green, 20%);
 $amColor: hsl(119, 38%, 31%);
 
 .mao {
@@ -23,14 +23,11 @@ $amColor: hsl(119, 38%, 31%);
   font-size: 36pt;
 }
 
-.col-md-4 {
-  footer {
-    font-family: $font-family-sans-serif;
-    color:  $mao_test;
-    background-color: rosybrown;
-  }
+
+footer {
+  font-family: $font-family-sans-serif;
+  font-size: 120%;
+  color:  $mainColor;
+  background-color: rosybrown;
 }
 
-.mao_test {
-  color: $mao_test;
-}
