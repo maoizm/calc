@@ -9,6 +9,7 @@ import plugins from 'gulp-load-plugins';
 // Other build tools
 import browser  from 'browser-sync';
 import rimraf from 'rimraf';
+import merge from 'merge-stream';
 
 const $ = plugins({
   rename: {
@@ -33,7 +34,7 @@ const config = {
   srcDir: 'src',
   destDir: 'dist',
   bowerRootDir: "./bower_components"
-}
+};
 
 const paths = {
   src: config.srcDir + '/**/*.html',
@@ -54,6 +55,14 @@ const paths = {
       config.bowerRootDir + '/bootstrap-sass/assets/fonts/**/*'
     ],
     dest: config.destDir + '/assets/fonts/'
+  },
+  images: {
+    src: [
+      config.srcDir + '/assets/images/**/*'
+    ],
+    dest: config.destDir + '/assets/images/',
+    faviconSrc: config.srcDir + '/assets/favicon.ico',
+    faviconDest: config.destDir
   },
   scripts: {
     src: [
@@ -84,6 +93,14 @@ function sass() {
 function fonts() {
   return gulp.src(paths.fonts.src)
       .pipe(gulp.dest(paths.fonts.dest));
+}
+
+function images() {
+  var imagesStream =  gulp.src(paths.images.src)
+    .pipe(gulp.dest(paths.images.dest));
+  var faviconStream =  gulp.src(paths.images.faviconSrc)
+    .pipe(gulp.dest(paths.images.faviconDest));
+  return merge(imagesStream, faviconStream);
 }
 
 function html() {
@@ -131,7 +148,7 @@ export function bump(aType = 'patch') {
       .pipe(gulp.dest('./'));
 }
 
-const build = gulp.series(clean, gulp.parallel(fonts, sass, scripts, html), server, watch);
+const build = gulp.series(clean, gulp.parallel(fonts, sass, images, scripts, html), server, watch);
 export {build};
 
 /*

@@ -2,17 +2,34 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Калькулятор аутсорсинговых услуг</title>
   <link rel="stylesheet" href="assets/css/app.min.css">
+  <link rel="icon" href="favicon.ico">
 </head>
 <body>
+  <nav class="navbar navbar-inverse">
+    <div class="container-fluid">     
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#">Starlink</a>
+        </div>
+        <ul class="nav navbar-nav">
+          <li class="active"><a href="#">Home</a></li>
+          <li><a href="#">Page 1</a></li>
+          <li><a href="#">Page 2</a></li> 
+          <li><a href="#">Page 3</a></li> 
+        </ul>
+    </div>
+  </nav>
+  <header>
+  <div class="page-header">
+    <h1>Калькулятор стоимости <small>абонентского обслуживания IT-инфраструктуры</small></h1>
+  </div>
+  </header>
   <div class="container">
     <div class="row mao">
       <div class="col-md-1 col-sm-2 col-xs-3">
-        <header class="mao">
-          <h4>this is header</h4>
-        </header>
       </div>
       <div class="col-md-3 col-sm-3 col-xs-3">
         <p>just a text</p>
@@ -45,26 +62,28 @@
             <div>
               <input id="element_3" name="element_3" class="form-control" type="text" maxlength="255" value=""/>
             </div>
-            <input type="hidden" name="form_id" value="1150554"/>
+            <input type="hidden" name="form_id" value="1150554" />
             <!--<input id="saveForm" class="button_text" type="submit" name="submit" value="Submit"/>-->
             <button type="submit" class="btn btn-default">Submit</button>
           </form>
-        <section>
-          <p class="mao">main area</p>
-        </section>
-      </div>
-      <div class="col-md-4">
-        <p>sidebar</p>
+          <section>
+            <p class="mao">main area</p>
+          </section>
+        </div>
+        <div class="col-md-4">
+          <p>sidebar</p>
+        </div>
       </div>
     </div>
+    <p>mao_test<span class="glyphicon glyphicon-euro"></span><span class="glyphicon glyphicon-align-left"></span></p>
+  </div>
+  <div class="container-fluid">
     <div class="row">
-      <div class="col-md-4 col-md-offset-8 col-sm-3 col-xs-3">
+      <div class="col-sm-11">
         <footer><p>yup!</p></footer>
       </div>
     </div>
   </div>
-  <p>mao_test<span class="glyphicon glyphicon-euro"></span><span class="glyphicon glyphicon-align-left"></span></p>
-
   <script src="assets/js/main.min.js"></script>
 </body>
 </html>
