@@ -33,7 +33,7 @@ const $ = plugins({
 const config = {
   srcDir: 'src',
   destDir: 'dist',
-  bowerRootDir: "./bower_components"
+  bowerRootDir: "bower_components"
 };
 
 const paths = {
@@ -69,7 +69,8 @@ const paths = {
       config.srcDir + '/assets/js/**/*.js'
     ],
     lib: [
-      config.bowerRootDir + '/bootstrap-sass/assets/javascripts/bootstrap.*js'
+      config.bowerRootDir + '/jquery/dist/jquery.js',
+      config.bowerRootDir + '/bootstrap-sass/assets/javascripts/bootstrap.js'
     ],
     dest: config.destDir + '/assets/js/'
   }
@@ -115,6 +116,7 @@ export function clean(done) {
 }
 
 function scripts() {
+  console.log([].concat(paths.scripts.src, paths.scripts.lib));
   return gulp.src([].concat(paths.scripts.src, paths.scripts.lib), { sourcemaps: true })
       .pipe($.uglify())
       .pipe($.concat('main.min.js'))
