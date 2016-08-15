@@ -40,11 +40,11 @@
     ]
   },
   "mao_TODO": {
-    "remove main-bower-files",
-    "remove gulp-bower-normalize",
-    "gulp-debug",
-    "gulp-debug-streams",
-    "gulp-filter",
-    "gulp-print"
+    "todo 01": "remove main-bower-files",
+    "todo 02": "remove gulp-bower-normalize",
+    "todo 03": "gulp-debug",
+    "todo 04": "gulp-debug-streams",
+    "todo 05": "gulp-filter",
+    "todo 06": "gulp-print"
   }
 }
