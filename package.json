@@ -16,6 +16,7 @@
     "browser-sync": "^2.14.0",
     "gulp": "git+https://github.com/gulpjs/gulp.git#4.0",
     "gulp-babel": "^6.1.2",
+    "gulp-bower-normalize": "^1.0.6",
     "gulp-bump": "^2.4.0",
     "gulp-clean-css": "^2.0.12",
     "gulp-concat": "^2.6.0",
@@ -24,6 +25,7 @@
     "gulp-load-plugins": "^1.2.4",
     "gulp-sass": "^2.3.2",
     "gulp-uglify": "^2.0.0",
+    "main-bower-files": "^2.13.1",
     "merge-stream": "^1.0.0",
     "rimraf": "^2.5.4"
   },

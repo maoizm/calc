@@ -159,3 +159,11 @@ export {build};
 
 // export default styles_html_scripts;
 export default build;
+
+
+gulp.task('bowerN', function() {
+  var bower = require('main-bower-files');
+  return gulp.src(bower(), { base: './bower_components' })
+    .pipe($.bowerNormalize({ bowerJson: './bower.json' }))
+    .pipe(gulp.dest('./dist/bower/'))
+});
