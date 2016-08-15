@@ -11,6 +11,8 @@ import browser  from 'browser-sync';
 import rimraf from 'rimraf';
 import merge from 'merge-stream';
 
+const PRODUCTION = false;
+
 const $ = plugins({
   rename: {
     'gulp-clean-css': 'cleanCSS'
@@ -47,7 +49,7 @@ const paths = {
       config.bowerRootDir + '/bootstrap-sass/assets/stylesheets'
     ],
     dest: config.destDir + '/assets/css/',
-    concatName: 'app.min.css'
+    destFile: 'app.css'
   },
   fonts: {
     src: [
@@ -79,17 +81,23 @@ const paths = {
 
 
 function sass() {
-  //console.log(paths.styles.include);
   return gulp.src(paths.styles.src)
+      .pipe(
+          $.if(!PRODUCTION, $.sourcemaps.init()))
       .pipe(
           $.sass({
             includePaths: paths.styles.include
           })
           .on('error', $.sass.logError))
-      .pipe($.concat(paths.styles.concatName))
-      .pipe($.cleanCSS({
-            keepSpecialComments: false //, keepBreaks: true
+      .pipe(
+          $.if(PRODUCTION, $.cleanCSS({
+            keepSpecialComments: false
+          })))
+      .pipe($.rename(function (path) {
+            path.basename += ".min";
           }))
+      .pipe(
+          $.if(!PRODUCTION, $.sourcemaps.write()))
       .pipe(gulp.dest(paths.styles.dest));
 }
 
@@ -111,8 +119,6 @@ function html() {
       .pipe(gulp.dest(paths.dest));
 }
 
-const styles_html = gulp.series(clean, gulp.parallel(sass, fonts, html));
-
 export function clean(done) {
   rimraf(paths.dest, done);
 }
@@ -120,16 +126,22 @@ export function clean(done) {
 function scripts() {
   console.log([].concat(paths.scripts.src, paths.scripts.lib));
   return gulp.src([].concat(paths.scripts.src, paths.scripts.lib), { sourcemaps: true })
+      .pipe(
+          $.if(!PRODUCTION, $.sourcemaps.init()))
+      .pipe(
+          $.if(!PRODUCTION, gulp.dest(paths.scripts.dest)))
       .pipe($.concat(paths.scripts.destFile))
       .pipe(gulp.dest(paths.scripts.dest))              // main.js
-      .pipe($.uglify())
-      .pipe($.rename(function (path) {
-          path.basename += ".min";
-      }))
+      .pipe(
+          $.if(PRODUCTION, $.uglify()))
+      .pipe(
+          $.rename(function (path) {
+            path.basename += ".min";
+          }))
+      .pipe(
+          $.if(!PRODUCTION, $.sourcemaps.write()))
       .pipe(gulp.dest(paths.scripts.dest));             // main.min.js
 }
-
-const styles_html_scripts = gulp.series(clean, gulp.parallel(sass, fonts, html, scripts));
 
 // Start a server with LiveReload to preview the site in
 
@@ -177,24 +189,24 @@ gulp.task('debugBowerNormalize', function() {
 gulp.task('debugSrc', function() {
   var bower = require('main-bower-files');
   return gulp.src(
-      bower({
-        overrides: {
-          "bootstrap-sass": {
-            main: [
-              './assets/stylesheets/_bootstrap.scss',
-              './assets/stylesheets/bootstrap/**/*.scss',
-              './javascripts/bootstrap.js'
-            ]
+        bower({
+          overrides: {
+            "bootstrap-sass": {
+              main: [
+                './assets/stylesheets/_bootstrap.scss',
+                './assets/stylesheets/bootstrap/**/*.scss',
+                './javascripts/bootstrap.js'
+              ]
+            }
           }
-        }
-      }),
-      {
-        base: './bower_components'
-      })
-    //.pipe($.debugStreams('1st'))
-    .pipe($.bowerNormalize())
-    .pipe($.debugStreams('2nd'))
-    // .pipe($.sass({
-    //     includePaths: ['bootstrap-sass/scss']
-    //   }))
+        }),
+        {
+          base: './bower_components'
+        })
+      //.pipe($.debugStreams('1st'))
+      .pipe($.bowerNormalize())
+      .pipe($.debugStreams('2nd'))
+      // .pipe($.sass({
+      //     includePaths: ['bootstrap-sass/scss']
+      //   }))
 });
