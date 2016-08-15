@@ -72,7 +72,8 @@ const paths = {
       config.bowerRootDir + '/jquery/dist/jquery.js',
       config.bowerRootDir + '/bootstrap-sass/assets/javascripts/bootstrap.js'
     ],
-    dest: config.destDir + '/assets/js/'
+    dest: config.destDir + '/assets/js/',
+    destFile: 'main.js'
   }
 };
 
@@ -80,7 +81,8 @@ const paths = {
 function sass() {
   //console.log(paths.styles.include);
   return gulp.src(paths.styles.src)
-      .pipe($.sass({
+      .pipe(
+          $.sass({
             includePaths: paths.styles.include
           })
           .on('error', $.sass.logError))
@@ -118,9 +120,13 @@ export function clean(done) {
 function scripts() {
   console.log([].concat(paths.scripts.src, paths.scripts.lib));
   return gulp.src([].concat(paths.scripts.src, paths.scripts.lib), { sourcemaps: true })
+      .pipe($.concat(paths.scripts.destFile))
+      .pipe(gulp.dest(paths.scripts.dest))              // main.js
       .pipe($.uglify())
-      .pipe($.concat('main.min.js'))
-      .pipe(gulp.dest(paths.scripts.dest));
+      .pipe($.rename(function (path) {
+          path.basename += ".min";
+      }))
+      .pipe(gulp.dest(paths.scripts.dest));             // main.min.js
 }
 
 const styles_html_scripts = gulp.series(clean, gulp.parallel(sass, fonts, html, scripts));
@@ -161,9 +167,34 @@ export {build};
 export default build;
 
 
-gulp.task('bowerN', function() {
+gulp.task('debugBowerNormalize', function() {
   var bower = require('main-bower-files');
   return gulp.src(bower(), { base: './bower_components' })
     .pipe($.bowerNormalize({ bowerJson: './bower.json' }))
     .pipe(gulp.dest('./dist/bower/'))
+});
+
+gulp.task('debugSrc', function() {
+  var bower = require('main-bower-files');
+  return gulp.src(
+      bower({
+        overrides: {
+          "bootstrap-sass": {
+            main: [
+              './assets/stylesheets/_bootstrap.scss',
+              './assets/stylesheets/bootstrap/**/*.scss',
+              './javascripts/bootstrap.js'
+            ]
+          }
+        }
+      }),
+      {
+        base: './bower_components'
+      })
+    //.pipe($.debugStreams('1st'))
+    .pipe($.bowerNormalize())
+    .pipe($.debugStreams('2nd'))
+    // .pipe($.sass({
+    //     includePaths: ['bootstrap-sass/scss']
+    //   }))
 });
