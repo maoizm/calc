@@ -125,7 +125,7 @@ export function clean(done) {
 
 function scripts() {
   console.log([].concat(paths.scripts.src, paths.scripts.lib));
-  return gulp.src([].concat(paths.scripts.src, paths.scripts.lib), { sourcemaps: true })
+  return gulp.src([].concat(paths.scripts.lib,paths.scripts.src), { sourcemaps: true })
       .pipe(
           $.if(!PRODUCTION, $.sourcemaps.init()))
       .pipe(

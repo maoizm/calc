@@ -1,6 +1,6 @@
 {
   "name": "calc",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "template of website with custom Bootstrap 3 SASS framework",
   "main": "index.html",
   "scripts": {

@@ -35,5 +35,20 @@ $amColor: hsl(119, 38%, 31%);
 
 .am_form .panel{
   background: rgba(255, 255, 255, 0.8);
-  box-shadow: rgba(0, 0, 0, 0.3) 20px 20px 20px;
+  box-shadow: rgba(0, 0, 0, 0.3) 0px 2px 5px;
+  @media only screen and (min-width: 768px) {
+    box-shadow: rgba(0, 0, 0, 0.2) 10px 10px 10px;
+  }
+  min-width: 368px;
+}
+
+.am_form-label-row {
+  display: flex;
+  align-items: flex-end;
+}
+
+.am_form div.radio {
+  margin: 0 0;
+  padding-top: 5px;
+  padding-bottom: 5px;
 }
