@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+  <title>Калькулятор аутсорсинговых услуг</title>
+  <style>
+    .am_form .panel{
+      background: rgba(255, 255, 255, 0.8);
+      box-shadow: rgba(0, 0, 0, 0.3) 0px 2px 5px;
+    }
+    .am_form-label-row {
+      display: flex;
+      align-items: flex-end;
+    }
+    .am_form div.radio {
+      margin: 0 0;
+      padding-top: 5px;
+      padding-bottom: 5px;
+    }
+  </style>
+  <script>
+
+    function calcTotal() {
+      var price = {
+        pc: [10, 8, 5.5],
+        server: [28, 23, 16],
+        virtServer: [23, 19, 12.5],
+        emergencyVisit: [27, 23, 19],
+        planVisit: [19, 19, 19],
+        inflation: {
+          "01_2015": 19.83,
+          "02_2015": 20.88,
+          "03_2015": 23.13,
+          "04_2015": 26.37,
+          "05_2015": 26.95,
+          "06_2015": 27.06,
+          "07_2015": 26.79,
+          "08_2015": 26.57,
+          "09_2015": 27.18,
+          "10_2015": 26.83,
+          "11_2015": 27.37,
+          "12_2015": 27.56,
+          "01_2016": 27.81,
+          "02_2016": 27.70,
+          "03_2016": 27.97,
+          "04_2016": 28.95,
+          "05_2016": 28.98,
+          "06_2016": 28.92,
+          "07_2016": 28.89,
+          "08_2016": 29.89
+        }
+      };
+      var nPC=$("#pcNumber").val() || 0;
+      var nServ=$("#serverNumber").val() || 0;
+      var nVirtServ=$("#serverVirtualNumber").val() || 0;
+      var nTotalServ = nServ + nVirtServ;
+      var SLA=$("input[name=SLA]:checked", "#calcForm").val();
+      var nPlanVisits=$("input[name=nVisitsSLA"+SLA+"]").val();
+      var standardPrice = nPC*price.pc[SLA-1] + nServ*price.server[SLA-1] + nVirtServ*price.virtServer[SLA-1] + nPlanVisits*price.planVisit[SLA-1];
+      var discount = Math.max( nPC<20       ? 0 : nPC<40        ? 0.1 : nPC<60  ?  0.2 : 0.25 ,
+          nTotalServ<6 ? 0 : nTotalServ<12 ? 0.1 : 0.15
+      );
+      var d = new Date();
+      var monthNumber = d.getMonth();
+      monthNumber = ( monthNumber < 10 ? "0" : "" ) + monthNumber;
+      monthYear = monthNumber + "_" + d.getFullYear();
+      var euroRate = price.inflation[monthYear];
+      return Math.round(standardPrice * (1 - discount) * euroRate);
+    }
+    $(document).ready(function() {
+      $("#am_Recalculate").click(function () {
+        $("#am_Total").html(calcTotal() + " UAH");
+      });
+    });
+  </script>
+</head>
+<body>
+<div class="container">
+  <div class="row am_form">
+    <div class="col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2">
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <h3 class="panel-title">Введите данные для рассчета стоимости обслуживания ПК</h3>
+        </div>
+        <div class="panel-body">
+          <form id="calcForm" role="form">
+            <div class="form-group">
+              <div class="row am_form-label-row">
+                <div class="col-xs-3">
+                  <small>ПК, шт.</small>
+                </div>
+                <div class="col-xs-4">
+                  <small>Серверы, шт.</small>
+                </div>
+                <div class="col-xs-5">
+                  <small>Из них виртуальные, шт.</small>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xs-3">
+                  <input type="number" name="pcNumber" id="pcNumber" min="1" class="form-control input-sm" placeholder="Кол-во, шт.">
+                </div>
+                <div class="col-xs-4">
+                  <input type="number" name="serverNumber" id="serverNumber" min="0" class="form-control input-sm" placeholder="Кол-во, шт.">
+                </div>
+                <div class="col-xs-5">
+                  <input type="number" name="serverVirtualNumber" id="serverVirtualNumber" min="0" class="form-control input-sm" placeholder="Кол-во, шт.">
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="row am_form-label-row">
+                <div class="col-xs-4">
+                  <small>Уровень обслуживания:</small>
+                </div>
+                <div class="col-xs-8">
+                  <small>Количество плановых визитов инженера:</small>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xs-4">
+                  <div class="radio"><label><input type="radio" name="SLA" value="1" checked>SLA 1</label></div>
+                  <div class="radio"><label><input type="radio" name="SLA" value="2">SLA 2</label></div>
+                  <div class="radio"><label><input type="radio" name="SLA" value="3">SLA 3</label></div>
+                </div>
+                <div class="col-xs-4">
+                  <input type="number" name="nVisitsSLA1" min="0" class="form-control input-sm">
+                  <input type="number" name="nVisitsSLA2" min="0" class="form-control input-sm">
+                  <input type="number" name="nVisitsSLA3" min="0" class="form-control input-sm">
+                </div>
+              </div>
+            </div>
+            <div class="row form-group">
+              <div class="col-xs-6 col-xs-offset-3">
+                <h1 id="am_Total" class="text-center">0 UAH</h1>
+              </div>
+            </div>
+            <div class="row form-group">
+              <button type="button" id="am_Recalculate" class="btn btn-info center-block">Посчитать</button>
+            </div>
+            <div class="row">
+              <div class="col-xs-12">
+                <div class="form-group">
+                  <div class="input-group">
+                    <span class="input-group-addon">@</span>
+                    <input type="email" name="email" id="email" class="form-control input-sm" placeholder="Email Address">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <input type="submit" value="Отправить заявку" class="btn btn-info btn-block">
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
