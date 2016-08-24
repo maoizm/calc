@@ -92,9 +92,8 @@ function calcTotal() {
                            nTotalServ<6 ? 0 : nTotalServ<12 ? 0.1 : 0.15
                  );
   var d = new Date();
-  var monthNumber = d.getMonth();
-  monthNumber = ( monthNumber < 10 ? "0" : "" ) + monthNumber;
-  monthYear = monthNumber + "_" + d.getFullYear();
+  var monthNumber = d.getMonth() + 1;								                   // because January is 0    
+  monthYear = ( monthNumber < 10 ? "0" : "" ) + monthNumber + "_" + d.getFullYear();
   var euroRate = price.inflation[monthYear];
   return Math.round(standardPrice * (1 - discount) * euroRate);
 }
